@@ -1,9 +1,10 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import {HttpException, HttpStatus, Inject, Injectable} from '@nestjs/common'
 import User from './user.entity'
-import { Repository, In} from 'typeorm';
+import { Repository} from 'typeorm';
 import CreateUserDto from './dto/createUser.dto';
 import  * as bcrypt from 'bcrypt'
+import UpdateUserDto from './dto/updateUser.dto'
 
 @Injectable()
 export class UsersService {
@@ -39,11 +40,19 @@ export class UsersService {
         })
 
         await this.usersRepository.save(newUser);
-        return newUser;
+
+        if(newUser){
+            return newUser
+        }
     }
 
-    async updateUser(){
+    async updateUser(id, updateUserData:UpdateUserDto): Promise<any>{
+        try{
+            await this.usersRepository.update(id, updateUserData)
+        }catch(error){
+            throw new HttpException("Cant not update", HttpStatus.CONFLICT)
+        }
         
-    }
 
+    }
 }

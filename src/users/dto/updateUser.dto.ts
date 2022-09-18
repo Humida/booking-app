@@ -3,12 +3,7 @@ import {IsOptional, IsString} from 'class-validator'
 
 export default class UpdateUserDto{
     @IsOptional()
-    firstName: string;
-    @IsOptional()
-    lastName: string;
-
-    @IsOptional()
-    userName: string;
+    fullName: string;
 
     @IsOptional()
     phoneNumber: string;

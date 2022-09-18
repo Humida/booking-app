@@ -2,13 +2,8 @@ import { IsOptional } from 'class-validator';
 import {Entity,
         Column,
         PrimaryGeneratedColumn,
-        OneToOne,
-        JoinColumn,
-        PrimaryColumn,
-        OneToMany,
         CreateDateColumn,
         UpdateDateColumn} from 'typeorm'
-// import Rate from '../hotels/rate.entity'
 
 export enum UserRole{
     ADMIN =  'admin',
@@ -22,13 +17,7 @@ export default class User{
     public id: number;
 
     @Column()
-    public firstName: string;
-
-    @Column()
-    public lastName: string;
-
-    @Column({unique: true})
-    public userName: string;
+    public fullName: string;
 
     @Column({unique: true})
     public email: string;
@@ -50,12 +39,6 @@ export default class User{
 
     @Column({nullable: true})
     public isActive?: boolean;
-
-    // @OneToMany(()=>  Rate, (rate)=> rate.user)
-    // rates: Rate[]
-
-    // @PrimaryColumn()
-    // addressId?: number
 
     @CreateDateColumn({nullable: true})
     createAt: Date;
