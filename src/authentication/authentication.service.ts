@@ -2,14 +2,19 @@ import { Injectable } from '@nestjs/common';
 import User from '../users/user.entity';
 import { Repository } from 'typeorm';
 import {HttpException, HttpStatus} from '@nestjs/common' 
-import bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt'
 import { UsersService } from 'src/users/users.service';
 import CreateUserDto from 'src/users/dto/createUser.dto';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import TokenPayload from './tokenPayload.interface';
 
 @Injectable()
 export class AuthenticationService {
     constructor(
         private userService: UsersService,
+        private configService: ConfigService,
+        private jwtService: JwtService
         ){
     }
 
@@ -41,21 +46,28 @@ export class AuthenticationService {
         }  
     }
 
-    private async verifyPassword(hashedPassword: string, password: string){
-        const isPasswordMatching = await bcrypt.compare(hashedPassword, password);
+    private async verifyPassword(plainTextPassword: string, password: string){
+        const isPasswordMatching = await bcrypt.compare(plainTextPassword, password);
         if(!isPasswordMatching){
             throw new HttpException("Wrong cendentials provided", HttpStatus.BAD_REQUEST)
         }
     }
 
-    public async getAuthenticateUser(email: string, planTextPassword: string){
+    public async getAuthenticateUser(email: string, plainTextPassword: string){
+        console.log('addd')
+
         try {
             const user = await this.userService.getUserByEmail(email);
-            await this.verifyPassword(planTextPassword, user.password)
+            await this.verifyPassword(plainTextPassword, user.password)
             return user;
         }catch(error){
             throw new HttpException("Wrong cendentials provided", HttpStatus.BAD_REQUEST)
         }
-
     }
+
+    public getCookieWithJwtToken(userId, number){
+        const pyload: TokenPayload = {userId}
+        const token = this.jwtService.sign(pyload)
+        return {accessToken: token}
+    }   
 }

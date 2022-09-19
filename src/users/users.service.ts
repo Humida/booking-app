@@ -5,7 +5,7 @@ import { Repository} from 'typeorm';
 import CreateUserDto from './dto/createUser.dto';
 import  * as bcrypt from 'bcrypt'
 import UpdateUserDto from './dto/updateUser.dto'
-
+import { UserRole } from './user.entity';
 @Injectable()
 export class UsersService {
     constructor(
@@ -13,8 +13,8 @@ export class UsersService {
         private usersRepository: Repository<User>,
     ){}
     
-    // define function service
     async getUserByEmail(email: string){
+        console.log('addd')
         const user = await this.usersRepository.findOneBy({email});
         if (user){
             return user;
@@ -48,11 +48,16 @@ export class UsersService {
 
     async updateUser(id, updateUserData:UpdateUserDto): Promise<any>{
         try{
-            await this.usersRepository.update(id, updateUserData)
+           return await this.usersRepository.update(id, updateUserData)
         }catch(error){
             throw new HttpException("Cant not update", HttpStatus.CONFLICT)
         }
-        
+    }
 
+    async deleteUser(role, id){
+        if(role == UserRole.ADMIN){
+           return await this.usersRepository.delete({id})
+        }
+        throw new HttpException("permission denied", HttpStatus.FORBIDDEN)
     }
 }
