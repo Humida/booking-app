@@ -1,7 +1,10 @@
 import {IsString, IsNumber, IsNotEmpty, IsOptional} from 'class-validator'
 
-export default class UpdateHotelDto{
+import { HotelType } from '../hotel.entity';
+export default class CreateHotelDto{
     hotelName: string;
     description: string;
-    hotelType: string;   
+    hotelType: HotelType;
+    address: object;
+    images: string[];
 }

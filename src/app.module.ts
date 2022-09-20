@@ -9,7 +9,6 @@ import { BookingModule } from './booking/booking.module';
 import { HotelsModule } from './hotels/hotels.module';
 import { RoomsModule } from './rooms/rooms.module';
 import { SearchModule } from './search/search.module';
-import { AddressModule } from './address/address.module';
 import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 
@@ -29,7 +28,6 @@ import { DatabaseModule } from './database/database.module';
             HotelsModule,
             RoomsModule,
             SearchModule,
-            AddressModule,
             UsersModule,
             DatabaseModule],
   controllers: [AppController,],
